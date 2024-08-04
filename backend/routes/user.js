@@ -1,4 +1,5 @@
 const {userMiddleware} = require("../Middleware/userMiddleware")
+const mongoose = require('mongoose');
 const {User} = require("../database/schema")
 const {key} = require("../Middleware/config")
 const {zSchema} = require("../database/types")
@@ -86,6 +87,10 @@ router.post('/add', userMiddleware, async(req,res)=>{
       description,
       completed,
       date} = req.body
+
+      if(!title){
+        return res.status(411).json({msg:"atleast title is required"})
+      }
   
       const email = req.user.email
       const user = await User.findOne({email})
@@ -162,6 +167,48 @@ router.post('/forgotpass', async (req,res)=>{
   }
   }catch(e){
     res.status(411).json("Internal Server Error")
+    console.log(e)
+  }
+})
+
+router.post('/update',userMiddleware,async (req,res)=> {
+  try{
+    const  email  =  req.user.email;
+    const user = await User.findOne({email})
+  
+    const {title,
+      description,
+      completed,
+      date,id} = req.body
+  
+      const objectId = new mongoose.Types.ObjectId(id);
+      if(!id){
+        return res.status(411).json({msg:"Id is required"})
+      }
+      if (!title && !description && !completed && !date) {
+        return res.status(411).json({ msg: "At least one new credential is required" });
+      }
+    const todo = user.todo.id(objectId)
+    if(!todo){
+      return res.json({
+        msg:"Invalid Id, no todo found"
+      })
+    }
+  
+    todo.title = title
+    todo.description = description
+    todo.completed = completed
+    todo.date = date
+  
+    await user.save()
+  
+    res.status(200).json({
+      msg:"todo updated successfully"
+    })
+  }catch(e){
+    res.status(411).json({
+      msg:"Internal Server Error"
+    })
     console.log(e)
   }
 })
