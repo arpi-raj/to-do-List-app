@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { boolean } = require('zod');
 
 // Set up default mongoose connection
 const mongoDB = 'mongodb+srv://admin:abbasbringfalafel@cluster0.yni3uic.mongodb.net/to-do-Project';
@@ -18,6 +19,7 @@ db.once('open', () => {
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    verifiedOtp:{type: Boolean},
     todo: [{
       title: String,
       description: String,

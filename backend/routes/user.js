@@ -1,4 +1,5 @@
 const {userMiddleware} = require("../Middleware/userMiddleware")
+const otp = require("../Middleware/otpVerify")
 const mongoose = require('mongoose');
 const {User} = require("../database/schema")
 const {key} = require("../Middleware/config")
@@ -26,15 +27,24 @@ if (!result.success) {
     });
 }
 
-  
+const generatedOTP = otp.generateOTP();
+global.otpExpiryTime = Date.now() + (10 * 60 * 1000);
+global.generatedOTP = generatedOTP;
+
+console.log("local: "+generatedOTP)
+console.log("global: "+global.generatedOTP)
+console.log("global: "+typeof(global.generatedOTP))
+
+await otp.sendOTP(email,global.generatedOTP)
   try{
     await User.create({
       username,
       email,
       password,
+      verifiedOtp:false
     })
     res.json({
-      msg:"User Created Successfully"
+      msg:"Please verify Otp"
     })
   }catch(e){
     console.log(e)
@@ -52,17 +62,57 @@ if (!result.success) {
   }
 })
 
+router.post('/verifyotp',async (req,res)=> { 
+  const {email,otp} = req.headers;
+  const user = await User.find({email})
+  if(!user){
+    return res.json({
+      msg:"Email of user not found in temprory db"
+    })
+  }
+  if (Date.now() > otpExpiryTime) {
+    await User.deleteOne({email});
+      return res.status(400).json({ message: 'OTP expired' });
+  }
+  if (otp === generatedOTP) {
+    const user = await User.findOne({email})
+    user.verifiedOtp = true
+    await user.save()
+      return res.status(200).json({ message: 'OTP verified successfully, User Created' });
+  } else {
+    await User.deleteOne({email});
+      return res.status(400).json({ message: 'Invalid OTP,try Signing up again' })
+      
+  }
+}
+)
+
 router.post('/signin', async (req, res) => {
-  // Implement admin signup logic
+    // Implement admin signup logi
+  try{
   const {email,password} = req.headers
-  const user = await User.find({
+  const user = await User.findOne({
       email,
       password
       })
+
+  if(!user){
+    res.json({
+      msg:"User dosen't exists in database Sign in first"
+    })
+  }
+
       console.log(key)
       console.log(user)
-      if(user){
-// always use a payload to access the data else you can't if you directly pass it
+
+      if (user.verifiedOtp === false){
+        return res.json({
+          msg:"User in temproray db please verify otp first or signup"
+        })
+      }
+
+      else{
+        // always use a payload to access the data else you can't if you directly pass it
         const payload = {
           email:email,
           password:password
@@ -73,11 +123,13 @@ router.post('/signin', async (req, res) => {
           token: token
       })
     }
-    else{
-      res.status(411).json({
-          msg:"User Invalid"
-      })
-      }
+  }catch(e){
+    res.json({
+      msg:"Internal Error occured"
+    })
+    console.log(e)
+  }
+
 });
 
 router.post('/add', userMiddleware, async(req,res)=>{
