@@ -72,7 +72,7 @@ router.post('/verifyotp',async (req,res)=> {
   }
   if (Date.now() > otpExpiryTime) {
     await User.deleteOne({email});
-      return res.status(400).json({ message: 'OTP expired' });
+      return res.status(401).json({ message: 'OTP expired, sign up again' });
   }
   if (otp === generatedOTP) {
     const user = await User.findOne({email})
@@ -80,15 +80,14 @@ router.post('/verifyotp',async (req,res)=> {
     await user.save()
       return res.status(200).json({ message: 'OTP verified successfully, User Created' });
   } else {
-    await User.deleteOne({email});
-      return res.status(400).json({ message: 'Invalid OTP,try Signing up again' })
+      return res.status(401).json({ message: 'Invalid OTP,try again' })
       
   }
 }
 )
 
 router.post('/signin', async (req, res) => {
-    // Implement admin signup logi
+    // Implement admin signup logic
   try{
   const {email,password} = req.headers
   const user = await User.findOne({
@@ -97,7 +96,7 @@ router.post('/signin', async (req, res) => {
       })
 
   if(!user){
-    res.json({
+    res.status(401).json({
       msg:"User dosen't exists in database Sign in first"
     })
   }
@@ -106,7 +105,7 @@ router.post('/signin', async (req, res) => {
       console.log(user)
 
       if (user.verifiedOtp === false){
-        return res.json({
+        return res.status(401).json({
           msg:"User in temproray db please verify otp first or signup"
         })
       }
