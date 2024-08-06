@@ -1,8 +1,9 @@
+require('dotenv').config()
 const {userMiddleware} = require("../Middleware/userMiddleware")
 const otp = require("../Middleware/otpVerify")
 const mongoose = require('mongoose');
 const {User} = require("../database/schema")
-const {key} = require("../Middleware/config")
+const key = process.env.key
 const {zSchema} = require("../database/types")
 const { Router } = require("express");
 const jwt = require("jsonwebtoken")
@@ -191,36 +192,58 @@ router.get('/todos', userMiddleware, async (req, res) => {
 
 router.post('/forgotpass', async (req,res)=>{
   try{
-    const {email,newpass} = req.headers
-  const user = await User.findOne({email})
-  if(!user){
-    return res.json({
-      msg:"User not on database try Sign-Up"
-    })
-    
-  }
-  else{
-    try{
-      const result = zSchema.safeParse({email,password:newpass})
-      if(!result.success){
+    const {email} = req.headers
+    const user = await User.findOne({email})
+    if(!user){
       return res.json({
-        msg:"Password must be 8 characters"
+        msg:"User not on database try Sign-Up"
       })
     }
-    }catch(e){
-      console.log(e)
-    }
-    user.password=newpass
-    await user.save()
-    res.json({
-      msg:"Password updated successfully"
+    const generatedOTP= otp.generateOTP()
+    global.otpExpiryTime = Date.now() + (10 * 60 * 1000);
+    global.generatedOTP=generatedOTP
+    console.log(generatedOTP)
+    otp.sendOTPForgot(email,generatedOTP)
+    res.status(200).json({
+      msg:"Please verify your otp to change the Password"
     })
-  }
   }catch(e){
     res.status(411).json("Internal Server Error")
     console.log(e)
   }
 })
+
+router.post('/verify-forgot', async (req, res) => {
+  try {
+    //headers m hamesa sab small letters m nhi toh wo conv. ho jate h aur error cause krte h
+    //try using hashed passwords 
+    // one more thing always use body to send these type of data 
+    // no restrictions on name and they are safe headers are shown to network traffic body isn't 
+    const { newpass, otp, email } = req.headers;
+
+    if (!newpass || !otp || !email) {
+      console.log('Headers:', req.headers);
+      return res.status(400).json({ msg: "Missing required fields" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ msg: "User Not Found" });
+    }
+
+    if (otp === generatedOTP) {
+      user.password = newpass;
+      await user.save();
+      return res.status(200).json({ message: 'OTP verified successfully, Password Changed' });
+    } else {
+      return res.status(401).json({ message: 'Invalid OTP, try again' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 router.post('/update',userMiddleware,async (req,res)=> {
   try{

@@ -1,8 +1,8 @@
+require('dotenv').config()
 const mongoose = require('mongoose');
-const { boolean } = require('zod');
 
 // Set up default mongoose connection
-const mongoDB = 'mongodb+srv://admin:abbasbringfalafel@cluster0.yni3uic.mongodb.net/to-do-Project';
+const mongoDB = process.env.mongoUrl;
 mongoose.connect(mongoDB);
 
 // Get the default connection

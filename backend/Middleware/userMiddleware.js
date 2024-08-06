@@ -1,4 +1,5 @@
-const { key } = require("./config");
+require('dotenv').config()
+const  key  = process.env.key;
 const jwt = require("jsonwebtoken");
 
 async function userMiddleware(req, res, next) {
