@@ -91,14 +91,25 @@ router.post('/signin', async (req, res) => {
     // Implement admin signup logic
   try{
   const {email,password} = req.headers
-  const user = await User.findOne({
+
+  const user1 = await User.findOne({
       email,
-      password
       })
 
-  if(!user){
-    res.status(401).json({
+  const user = await User.findOne({
+    email,
+    password
+  })
+
+  if(!user1){
+    return res.status(401).json({
       msg:"User dosen't exists in database Sign in first"
+    })
+  }
+
+  if(!user){
+    return res.status(401).json({
+      msg:"Invalid Passoword"
     })
   }
 
