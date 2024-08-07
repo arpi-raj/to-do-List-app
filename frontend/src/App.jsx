@@ -57,7 +57,13 @@ function App() {
         console.log(response.data.msg)
       }
     } catch (error) {
-      console.error('Signin error:', error);
+      if (error.response) {
+        console.error('Signin error:', error.response.data.msg);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
     }
   };
 
