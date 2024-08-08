@@ -94,14 +94,17 @@ router.post('/signin', async (req, res) => {
     })
   }
 
-  const user1 = await User.findOne({
+  const user = await User.findOne({
       email,
       })
 
-  const user = await User.findOne({
-    email,
-    password
-  })
+  console.log(user)
+
+  if(!user){
+    return res.status(401).json({
+      msg:"User dosen't exists in database Sign-Up first"
+    })
+  }
 
   if(user.verifiedOtp===false){
     return res.status(401).json({
@@ -109,13 +112,7 @@ router.post('/signin', async (req, res) => {
     })
   }
 
-  if(!user1){
-    return res.status(401).json({
-      msg:"User dosen't exists in database Sign-Up first"
-    })
-  }
-
-  if(!user){
+  if(user.password != password){
     return res.status(401).json({
       msg:"Invalid Passoword"
     })
@@ -134,7 +131,7 @@ router.post('/signin', async (req, res) => {
       })
     }
   }catch(e){
-    res.status(401).json({
+    res.status(500).json({
       msg:"Internal Error occured"
     })
     console.log(e)
