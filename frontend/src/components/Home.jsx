@@ -1,8 +1,32 @@
-import React, { useState } from 'react';
-import {taken7} from "./Signin";
+import React, { useState, useEffect } from 'react';
+import { taken7 } from "./Signin";
+import axios from 'axios';
+
 const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
+
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/user/todos', {
+          headers: {
+            authorization: `Bearer ${taken7}`,
+          },
+        });
+        if(response.status==200){
+          console.log(response.data.todos)
+          setTodos(response.data.todos); // Update todos state with the fetched data
+        }
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+      }
+    };
+
+    fetchTodos();
+  }, []); // Empty dependency array to run only on mount
 
   const handleAddTask = () => {
     if (newTask.trim() !== '') {
@@ -19,7 +43,11 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-800 text-white flex flex-col items-center p-4">
       <header className="text-3xl font-bold my-6">My To-Do List</header>
-      <h1>{taken7}</h1>
+
+      {/* Pass todos as a prop to RenderTodos */}
+      <ul className="mb-6">
+        <RenderTodos todos={todos} />
+      </ul>
 
       <div className="flex flex-col items-center w-full max-w-lg">
         <input
@@ -60,5 +88,18 @@ const Home = () => {
     </div>
   );
 };
+
+function RenderTodos({ todos }) {
+  return (
+    todos.map((todo, index) => (
+      <li key={index} className="mb-2">
+        <h2>{todo.title}</h2>
+        <p>{todo.description}</p>
+        <p>Completed: {todo.completed ? 'Yes' : 'No'}</p>
+        <p>Date: {todo.date}</p>
+      </li>
+    ))
+  );
+}
 
 export default Home;
