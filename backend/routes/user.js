@@ -9,8 +9,10 @@ const { Router } = require("express");
 const jwt = require("jsonwebtoken")
 const router = Router();
 
+let signupOtp,forgotOtp
+
 router.post("/signup", async function(req,res){
-  const {username,email,password} = req.headers
+  const {username,email,password} = req.body
 
   if (!username || !email || !password) {
     return res.status(400).json({
@@ -28,15 +30,9 @@ if (!result.success) {
     });
 }
 
-const generatedOTP = otp.generateOTP();
-global.otpExpiryTime = Date.now() + (10 * 60 * 1000);
-global.generatedOTP = generatedOTP;
+  signupOtp = otp.generateOTP();
+  otpExpiryTime = Date.now() + (10 * 60 * 1000);
 
-console.log("local: "+generatedOTP)
-console.log("global: "+global.generatedOTP)
-console.log("global: "+typeof(global.generatedOTP))
-
-await otp.sendOTP(email,global.generatedOTP)
   try{
     await User.create({
       username,
@@ -44,6 +40,7 @@ await otp.sendOTP(email,global.generatedOTP)
       password,
       verifiedOtp:false
     })
+    await otp.sendOTP(email,signupOtp)
     res.json({
       msg:"Please verify Otp"
     })
@@ -64,8 +61,8 @@ await otp.sendOTP(email,global.generatedOTP)
 })
 
 router.post('/verifyotp',async (req,res)=> { 
-  const {email,otp} = req.headers;
-  const user = await User.find({email})
+  const {email,otp} = req.body;
+  const user = await User.findOne({email})
   if(!user){
     return res.json({
       msg:"Email of user not found in temprory db"
@@ -75,14 +72,12 @@ router.post('/verifyotp',async (req,res)=> {
     await User.deleteOne({email});
       return res.status(401).json({ message: 'OTP expired, sign up again' });
   }
-  if (otp === generatedOTP) {
-    const user = await User.findOne({email})
+  if (otp === signupOtp) {
     user.verifiedOtp = true
     await user.save()
       return res.status(200).json({ message: 'OTP verified successfully, User Created' });
   } else {
       return res.status(401).json({ message: 'Invalid OTP,try again' })
-      
   }
 }
 )
@@ -90,7 +85,14 @@ router.post('/verifyotp',async (req,res)=> {
 router.post('/signin', async (req, res) => {
     // Implement admin signup logic
   try{
-  const {email,password} = req.headers
+  const {email,password} = req.body
+
+
+  if(!email || !password){
+    return res.status(401).json({
+      msg:"Credentials not found"
+    })
+  }
 
   const user1 = await User.findOne({
       email,
@@ -101,9 +103,15 @@ router.post('/signin', async (req, res) => {
     password
   })
 
+  if(user.verifiedOtp===false){
+    return res.status(401).json({
+      msg:"Verify Otp first to sign in"
+    })
+  }
+
   if(!user1){
     return res.status(401).json({
-      msg:"User dosen't exists in database Sign in first"
+      msg:"User dosen't exists in database Sign-Up first"
     })
   }
 
@@ -112,16 +120,7 @@ router.post('/signin', async (req, res) => {
       msg:"Invalid Passoword"
     })
   }
-
-      console.log(key)
-      console.log(user)
-
-      if (user.verifiedOtp === false){
-        return res.status(401).json({
-          msg:"User in temproray db please verify otp first or signup"
-        })
-      }
-
+  
       else{
         // always use a payload to access the data else you can't if you directly pass it
         const payload = {
@@ -203,7 +202,7 @@ router.get('/todos', userMiddleware, async (req, res) => {
 
 router.post('/forgotpass', async (req,res)=>{
   try{
-    const {email} = req.headers
+    const {email} = req.body
     const user = await User.findOne({email})
     if(!user){
       return res.json({
@@ -230,7 +229,7 @@ router.post('/verify-forgot', async (req, res) => {
     //try using hashed passwords 
     // one more thing always use body to send these type of data 
     // no restrictions on name and they are safe headers are shown to network traffic body isn't 
-    const { newpass, otp, email } = req.headers;
+    const { newpass, otp, email } = req.body;
 
     if (!newpass || !otp || !email) {
       console.log('Headers:', req.headers);
