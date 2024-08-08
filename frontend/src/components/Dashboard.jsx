@@ -19,8 +19,6 @@ function Dashboard() {
   };
 
 
-
-
   return (
     <div className='flex justify-center items-center h-screen w-screen bg-gray-800 text-white'>
       <CSSTransition

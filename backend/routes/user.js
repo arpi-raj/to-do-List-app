@@ -134,7 +134,7 @@ router.post('/signin', async (req, res) => {
       })
     }
   }catch(e){
-    res.json({
+    res.status(401).json({
       msg:"Internal Error occured"
     })
     console.log(e)
