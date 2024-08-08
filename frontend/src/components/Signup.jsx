@@ -12,31 +12,30 @@ const Signup = ({ setShowOTP, setSignupData, showOTP, switchToSignin }) => {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/user/signup', {}, {
-        headers: {
+      const response = await axios.post('http://localhost:3000/user/signup', {
           'Content-Type': 'application/json',
           'username': localSignupData.username,
           'email': localSignupData.email,
           'password': localSignupData.password,
         }
-      });
+      );
       if (response.status === 200) {
         setShowOTP(true); // Show OTP input if signup is successful
         setSignupData(localSignupData);
+        console.log(response.data.msg)
       }
     } catch (error) {
       console.error('Signup error:', error);
+      console.log(error.response.data.msg)
     }
   };
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/user/verifyotp', { otp }, {
-        headers: {
+      const response = await axios.post('http://localhost:3000/user/verifyotp',{
           email: localSignupData.email,
           otp: otp
-        }
       });
       if (response.status === 200) {
         console.log(response.data.message);
