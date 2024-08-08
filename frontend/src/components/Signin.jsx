@@ -12,14 +12,14 @@ const Signin = ({ setToken }) => {
   const handleSigninSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/user/signin', {}, {
-        headers: {
+      const response = await axios.post('http://localhost:3000/user/signin', {
           email: signinData.email,
           password: signinData.password
-        }
       });
       if (response.status === 200) {
         setToken(response.data.token);
+        console.log(response.data.token)
+        handleSigninClick
       } else if (response.status === 401) {
         console.log(response.data.msg);
       }
@@ -67,7 +67,7 @@ const Signin = ({ setToken }) => {
         <button
           type="submit"
           className="p-4 mt-4 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform transform hover:scale-105"
-          onClick={handleSigninClick}
+          onClick={handleSigninSubmit}
         >
           Sign In
         </button>
