@@ -169,7 +169,7 @@ router.post('/add', userMiddleware, async(req,res)=>{
         msg:"todo saved successfully"
       })
   }catch(e){
-    res.json({
+    res.status(500).json({
       msg:"an error occures while saving"
     })
   }
@@ -186,8 +186,8 @@ router.get('/todos', userMiddleware, async (req, res) => {
 
     //const todosList = user.todo.map(todo => `${todo.title}: ${todo.description}`).join(', ');
     // Send a response with user details or any other data
-    res.json({
-      msg: user.todo
+    res.status(200).json({
+      todos: user.todo
     });
   } catch (error) {
     console.error('Error:', error.message);
