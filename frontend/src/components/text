@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-let taken7;
 
 const Signin = ({ setToken }) => {
   const [signinData, setSigninData] = useState({ email: '', password: '' });
-  const navigate = useNavigate();
-  
 
   const handleSigninChange = (e) => {
     setSigninData({ ...signinData, [e.target.name]: e.target.value });
@@ -16,14 +13,13 @@ const Signin = ({ setToken }) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/user/signin', {
-        email: signinData.email,
-        password: signinData.password
+          email: signinData.email,
+          password: signinData.password
       });
       if (response.status === 200) {
         setToken(response.data.token);
-        taken7 = response.data.token;
         console.log(response.data.token)
-        navigate("/home")
+        handleSigninClick
       } else if (response.status === 401) {
         console.log(response.data.msg);
       }
@@ -36,7 +32,14 @@ const Signin = ({ setToken }) => {
         console.error('Error setting up request:', error.message);
       }
     }
+  };
 
+  const [showHome, setShowHome] = useState(false); 
+  const navigate = useNavigate();
+
+  const handleSigninClick = () => {
+    setShowHome(true);
+    navigate("/home"); 
   };
 
   return (
@@ -64,6 +67,7 @@ const Signin = ({ setToken }) => {
         <button
           type="submit"
           className="p-4 mt-4 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform transform hover:scale-105"
+          onClick={handleSigninSubmit}
         >
           Sign In
         </button>
@@ -72,5 +76,4 @@ const Signin = ({ setToken }) => {
   );
 };
 
-export {taken7};
 export default Signin;
