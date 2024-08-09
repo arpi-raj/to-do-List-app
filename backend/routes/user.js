@@ -122,7 +122,6 @@ router.post('/signin', async (req, res) => {
         // always use a payload to access the data else you can't if you directly pass it
         const payload = {
           email:email,
-          password:password
         }
         // gotta give the jwt a object always
       const token = jwt.sign(payload,key, { expiresIn: '1h' })
