@@ -125,7 +125,7 @@ router.post('/signin', async (req, res) => {
           password:password
         }
         // gotta give the jwt a object always
-      const token = jwt.sign(payload,key)
+      const token = jwt.sign(payload,key, { expiresIn: '1h' })
       res.json({
           token: token
       })
