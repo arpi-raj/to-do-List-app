@@ -1,0 +1,139 @@
+/* Container */
+.home-container {
+  min-height: 100vh;
+  background-color: #1a202c;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 30px 0;
+  color: #63b3ed;
+}
+
+/* Form Toggle Button */
+.form-toggle button {
+  padding: 12px;
+  background-color: #4299e1;
+  color: white;
+  border-radius: 8px;
+  width: 100%;
+  margin-bottom: 20px;
+  transition: background-color 0.3s;
+}
+.form-toggle button:hover {
+  background-color: #3182ce;
+}
+
+/* AddTodos Form */
+.add-todos {
+  width: 100vw;
+  max-width: 100%;
+  padding: 20px;
+  background-color: #2d3748;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-input {
+  padding: 12px;
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #4a5568;
+  color: white;
+  border: 1px solid #2c5282;
+  border-radius: 8px;
+  outline: none;
+}
+
+.form-button {
+  padding: 12px;
+  width: 100%;
+  background-color: #4299e1;
+  color: white;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+.form-button:hover {
+  background-color: #3182ce;
+}
+
+/* Task List */
+.task-list {
+  width: 100%;
+  max-width: 600px;
+}
+
+.task-input {
+  padding: 12px;
+  width: 100%;
+  margin-bottom: 10px;
+  background-color: #4a5568;
+  color: white;
+  border: 1px solid #2c5282;
+  border-radius: 8px;
+  outline: none;
+}
+
+.task-button {
+  padding: 12px;
+  width: 100%;
+  background-color: #4299e1;
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s;
+}
+
+.task-button:hover {
+  background-color: #3182ce;
+}
+
+.tasks {
+  list-style-type: none;
+  padding: 0;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: #2d3748;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-button {
+  color: #e53e3e;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.delete-button:hover {
+  color: #c53030;
+}
+
+/* Todo List */
+.todo-list {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.todo-item {
+  padding: 20px;
+  background-color: #2d3748;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
