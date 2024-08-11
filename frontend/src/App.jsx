@@ -3,11 +3,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Dashboard from './components/Dashboard'; 
 import Signin from './components/Signin';
 import Home from './components/Home';  
+import { RecoilRoot } from 'recoil';
 
 function App() {
   return (
     <BrowserRouter>
-      <div className='text-center'>
+    <RecoilRoot>
+    <div className='text-center'>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path='/signin' element={<Signin/>}/>
@@ -15,6 +17,7 @@ function App() {
           {/* Add other routes here as needed */}
         </Routes>
       </div>
+    </RecoilRoot>
     </BrowserRouter>
   );
 }

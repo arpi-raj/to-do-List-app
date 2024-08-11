@@ -21,7 +21,7 @@ const Home = () => {
         </button>
         {showForm && <AddTodos />}
       </div>
-      <TodoList />
+      <TodoList></TodoList>
     </div>
   );
 };

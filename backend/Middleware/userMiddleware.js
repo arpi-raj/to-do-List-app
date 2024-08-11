@@ -27,9 +27,13 @@ async function userMiddleware(req, res, next) {
 
         res.status(401).json({ msg: "User not found" });
     } catch (e) {
+        if (e.name === "TokenExpiredError") {
+            res.status(401).json({ msg: "Token expired" });
+        } else {
         console.error("Token verification error:", e.message);
+        console.log(token)
         res.status(401).json({ msg: "Token verification failed" });
-    }
+    }}
 }
 
 module.exports = {

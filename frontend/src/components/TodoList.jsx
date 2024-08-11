@@ -1,32 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
-import { taken7 } from './Signin';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { token, todoState } from '../../store/atoms/states';
 
 const TodoList = () => {
-  const [todos, setTodos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    // Log the token when the component mounts
-    console.log('Token on mount:', taken7);
-
-    // Set the token state
-    setToken(taken7);
-  }, []);
+  const [todos, setTodos] = useRecoilState(todoState);
+  const tokenHere = useRecoilValue(token);
 
   useEffect(() => {
     const fetchTodos = async () => {
-      if (!token) {
+      if (!tokenHere) {
         console.error('Token is not available');
-        setLoading(false);
         return;
       }
 
       try {
         const response = await axios.get('http://localhost:3000/user/todos', {
           headers: {
-            authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${tokenHere}`, // Correct token usage
           },
         });
         if (response.status === 200) {
@@ -34,19 +25,12 @@ const TodoList = () => {
         }
       } catch (error) {
         console.error('Error fetching todos:', error.response?.data?.message || error.message);
-      } finally {
-        setLoading(false);
       }
     };
 
-    if (token) {
-      fetchTodos();
-    }
-  }, [token]); // Fetch todos when the token is set
+    fetchTodos();
+  }, [setTodos, tokenHere]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <ul className="todo-list">

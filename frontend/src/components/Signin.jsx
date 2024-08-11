@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
-let taken7;
+import { token } from '../../store/atoms/states';
 
-const Signin = ({ setToken }) => {
+const Signin = () => {
   const [signinData, setSigninData] = useState({ email: '', password: '' });
   const navigate = useNavigate();
-  
+  const setToken = useSetRecoilState(token);
 
   const handleSigninChange = (e) => {
     setSigninData({ ...signinData, [e.target.name]: e.target.value });
@@ -20,23 +21,16 @@ const Signin = ({ setToken }) => {
         password: signinData.password
       });
       if (response.status === 200) {
-        setToken(response.data.token);
-        taken7 = response.data.token;
-        console.log(response.data.token)
-        navigate("/home")
+        const newToken = response.data.token;
+        localStorage.setItem('token', newToken); // Save token to localStorage
+        setToken(newToken);
+        navigate("/home");
       } else if (response.status === 401) {
         console.log(response.data.msg);
       }
     } catch (error) {
-      if (error.response) {
-        console.error('Signin error:', error.response.data.msg);
-      } else if (error.request) {
-        console.error('No response received:', error.request);
-      } else {
-        console.error('Error setting up request:', error.message);
-      }
+      console.error('Signin error:', error.response?.data?.msg || error.message);
     }
-
   };
 
   return (
@@ -72,5 +66,4 @@ const Signin = ({ setToken }) => {
   );
 };
 
-export {taken7};
 export default Signin;
