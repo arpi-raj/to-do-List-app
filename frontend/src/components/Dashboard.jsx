@@ -1,33 +1,29 @@
 import React, { useState } from 'react';
 import Signup from './Signup';
 import Signin from './Signin';
+import ResetPassword from './ResetPassword';
 import { CSSTransition } from 'react-transition-group';
-import './Dashboard.css'; // Ensure you have CSS for transitions
+import '../styles/Dashboard.css'; 
 
 function Dashboard() {
   const [showOTP, setShowOTP] = useState(false);
   const [signupData, setSignupData] = useState({});
   const [token, setToken] = useState('');
-  const [showSignin, setShowSignin] = useState(false); // State to toggle Signin page
+  const [currentView, setCurrentView] = useState('signin'); 
 
-  const switchToSignin = () => {
-    setShowSignin(true);
-  };
-
-  const switchToSignup = () => {
-    setShowSignin(false);
-  };
-
+  const switchToSignin = () => setCurrentView('signin');
+  const switchToSignup = () => setCurrentView('signup');
+  const switchToResetPassword = () => setCurrentView('resetPassword');
 
   return (
-    <div className='flex justify-center items-center h-screen w-screen bg-gray-800 text-white'>
+    <div className='dashboard-container flex justify-center items-center h-screen w-screen bg-white text-white'>
       <CSSTransition
-        in={!showSignin}
+        in={currentView === 'signup'}
         timeout={500}
         classNames="form"
         unmountOnExit
       >
-        <div className='flex flex-col p-10 bg-gray-900 rounded-lg shadow-lg'>
+        <div className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
           <Signup 
             setShowOTP={setShowOTP} 
             setSignupData={setSignupData} 
@@ -37,22 +33,23 @@ function Dashboard() {
         </div>
       </CSSTransition>
       <CSSTransition
-        in={showSignin}
+        in={currentView === 'signin'}
         timeout={500}
         classNames="form"
         unmountOnExit
       >
-        <div className='flex flex-col p-10 bg-gray-900 rounded-lg shadow-lg'>
-          <Signin setToken={setToken} />
-          <p className="mt-4 text-white text-center">
-            Don't have an account?{' '}
-            <button 
-              className="bg-transparent text-blue-500 p-2 border-0 border-transparent hover:border-blue-500 hover:text-blue-700 transition-colors duration-300"
-              onClick={switchToSignup}
-            >
-              Sign up
-            </button>
-          </p>
+        <div className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
+          <Signin switchToSignup={switchToSignup} switchToResetPassword={switchToResetPassword} />
+        </div>
+      </CSSTransition>
+      <CSSTransition
+        in={currentView === 'resetPassword'}
+        timeout={500}
+        classNames="form"
+        unmountOnExit
+      >
+        <div className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
+          <ResetPassword switchToSignin={switchToSignin} />
         </div>
       </CSSTransition>
     </div>
