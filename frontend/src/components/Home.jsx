@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
+import SearchBar from './SearchBar';
 import TodoList from './TodoList';
 import AddTodos from './AddTodos';
 import Navbar from './Navbar';
+import Profile from './Profile';
 
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0]; 
@@ -24,8 +26,16 @@ const Home = () => {
   return (
     <div>
       <Navbar />
+      <SearchBar
+          onChange={(e) => {
+            setFilter(e.target.value);
+          }}
+        />
       <div className="w-screen h-full bg-gray-900 text-white flex flex-col items-center p-5">
-        <Header />
+
+        <div>
+          <Profile></Profile>
+        </div>
         <div className="w-full max-w-full p-5 bg-gray-700 rounded-lg shadow-lg mb-5">
           <button
             onClick={handleToggle}
