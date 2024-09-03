@@ -52,7 +52,7 @@ const Signup = ({ setShowOTP, setSignupData, showOTP, switchToSignin }) => {
         setSuccessMessage('Account created successfully! Redirecting to sign in...');
         setTimeout(() => {
           switchToSignin();
-        }, 2000); // Redirect after 2 seconds
+        }, 2000); 
       } else if (response.status === 401) {
         console.log(response.data.message);
       }
@@ -63,7 +63,7 @@ const Signup = ({ setShowOTP, setSignupData, showOTP, switchToSignin }) => {
 
   return (
     <div className='flex flex-col items-center bg-white p-10 rounded-lg shadow-lg w-full max-w-md'>
-      <h2 className='mb-5 text-black text-center text-3xl font-semibold'>Register</h2>
+      <h2 className='mb-5 text-black text-center text-3xl font-semibold'>Sign up</h2>
       {!isRegistered ? (
         <form onSubmit={handleSignupSubmit} className='w-full flex flex-col'>
           <input
@@ -156,10 +156,11 @@ const Signup = ({ setShowOTP, setSignupData, showOTP, switchToSignin }) => {
           >
             Register
           </button>
+          
         </form>
+        
       ) : (
         <form onSubmit={handleOTPSubmit} className='w-full flex flex-col'>
-          <h3 className='mt-3 mb-2 -ml-60 font-semibold text-lg text-black'>OTP Verification</h3>
           <input
             type="text"
             name="otp"
@@ -171,7 +172,7 @@ const Signup = ({ setShowOTP, setSignupData, showOTP, switchToSignin }) => {
           />
           <button 
             type="submit" 
-            className="p-4 mt-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform transform hover:scale-105"
+            className="p-4 mt-4 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-transform transform hover:scale-105"
           >
             Verify OTP
           </button>
@@ -179,10 +180,18 @@ const Signup = ({ setShowOTP, setSignupData, showOTP, switchToSignin }) => {
       )}
 
       {successMessage && (
-        <div className="mt-4 p-4 text-green-600 bg-green-100 rounded-lg">
-          {successMessage}
-        </div>
+        <p className='text-green-500 text-center mt-4'>{successMessage}</p>
       )}
+
+      <p className="mt-4 text-gray-900 text-center">
+        Don't have an account?{' '}
+        <button 
+          className="bg-transparent text-blue-500 p-2 border-0 border-transparent hover:border-blue-500 hover:text-blue-700 transition-colors duration-300"
+          onClick={switchToSignin} 
+        >
+          Sign in
+        </button>
+      </p>
     </div>
   );
 };

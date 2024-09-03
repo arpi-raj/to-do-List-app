@@ -45,7 +45,7 @@ const Signin = ({ switchToSignup, switchToResetPassword }) => {
 
   return (
     <div className='flex flex-col items-center bg-white p-10 rounded-lg shadow-lg w-full max-w-md'>
-      <h2 className="mb-6 text-black text-3xl font-semibold">Login</h2>
+      <h2 className="mb-6 text-black text-3xl font-semibold">Sign in</h2>
       <form onSubmit={handleSigninSubmit} className="w-full flex flex-col">
       <input
           type="email"
@@ -133,7 +133,7 @@ const Signin = ({ switchToSignup, switchToResetPassword }) => {
           className="bg-transparent text-blue-500 p-2 border-0 border-transparent hover:border-blue-500 hover:text-blue-700 transition-colors duration-300"
           onClick={switchToSignup} 
         >
-          Register
+          Sign up
         </button>
       </p>
     </div>
