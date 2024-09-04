@@ -6,7 +6,7 @@ import { CheckCircle, Circle, Calendar, Clock, Edit, Trash2 } from 'lucide-react
 
 const TodoList = ({ filterDate }) => {
   const [todos, setTodos] = useRecoilState(todoState);
-  const tokenHere = useRecoilValue(token);
+  const tokenHere = localStorage.getItem('token')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
