@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { token, todoState } from '../../store/atoms/states';
-import { CheckCircle, Circle, Calendar, Clock } from 'lucide-react';
+import { CheckCircle, Circle, Calendar, Clock, Edit, Trash2 } from 'lucide-react';
 
 const TodoList = ({ filterDate }) => {
   const [todos, setTodos] = useRecoilState(todoState);
@@ -19,9 +19,7 @@ const TodoList = ({ filterDate }) => {
       }
       try {
         const response = await axios.get('http://localhost:3000/user/todos', {
-          headers: {
-            Authorization: `Bearer ${tokenHere}`,
-          },
+          headers: { Authorization: `Bearer ${tokenHere}` },
         });
         if (response.status === 200) {
           setTodos(response.data.todos);
@@ -66,26 +64,44 @@ const TodoList = ({ filterDate }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 max-h-[calc(100vh-12rem)] overflow-ellipsis">
+      
       {filteredTodos.length > 0 ? (
         filteredTodos.map((todo, index) => (
-          <div key={index} className="bg-gradient-to-br from-gray-800 to-gray-900 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold truncate">{todo.title}</h2>
+          <div
+            key={index}
+            className="bg-gradient-to-br from-gray-800 to-gray-900 text-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col w-full max-w-[400px] mx-auto"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-lg font-bold truncate">{todo.title}</h2>
               {todo.completed ? (
-                <CheckCircle className="text-green-400 h-6 w-6" />
+                <CheckCircle className="text-green-400 h-5 w-5" />
               ) : (
-                <Circle className="text-yellow-400 h-6 w-6" />
+                <Circle className="text-yellow-400 h-5 w-5" />
               )}
             </div>
-            <p className="text-gray-300 mb-4 flex-grow">{todo.description}</p>
-            <div className="flex items-center text-sm text-gray-400 mt-2">
-              <Calendar className="h-4 w-4 mr-2" />
+            <p className="text-gray-300 mb-2 flex-grow text-sm">{todo.description}</p>
+            <div className="flex items-center text-xs text-gray-400 mt-1">
+              <Calendar className="h-4 w-4 mr-1" />
               <span>{new Date(todo.date).toLocaleDateString()}</span>
             </div>
-            <div className="flex items-center text-sm text-gray-400 mt-2">
-              <Clock className="h-4 w-4 mr-2" />
+            <div className="flex items-center text-xs text-gray-400 mt-1">
+              <Clock className="h-4 w-4 mr-1" />
               <span>{todo.completed ? 'Completed' : 'Pending'}</span>
+            </div>
+            <div className="flex justify-between mt-4">
+              <button className="flex items-center px-2 py-1 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded">
+                <Edit className="h-4 w-4 mr-1" />
+                Edit
+              </button>
+              <button className="flex items-center px-2 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded">
+                <Trash2 className="h-4 w-4 mr-1" />
+                Delete
+              </button>
+              <button className="flex items-center px-2 py-1 text-sm bg-green-500 hover:bg-green-600 text-white rounded">
+                <CheckCircle className="h-4 w-4 mr-1" />
+                {todo.completed ? 'Unmark' : 'Complete'}
+              </button>
             </div>
           </div>
         ))

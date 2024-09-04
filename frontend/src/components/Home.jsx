@@ -9,7 +9,7 @@ const Home = () => {
   const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0]; 
+    const today = new Date().toISOString().split('T')[0];
     setSelectedDate(today);
   }, []);
 
@@ -26,10 +26,10 @@ const Home = () => {
       <Navbar />
       <div className="w-screen h-full bg-gray-900 text-white flex flex-col items-center p-5">
         <Header />
-        <div className="w-full max-w-full p-5 bg-gray-700 rounded-lg shadow-lg mb-5">
+        <div className="w-1/5 p-5 bg-gray-700 rounded-lg shadow-lg mb-5">
           <button
             onClick={handleToggle}
-            className="px-4 py-3 bg-blue-500 text-white rounded-lg w-full mb-5 transition duration-300 hover:bg-blue-600"
+            className="px-1 py-3 bg-blue-500 text-white rounded-lg w-48 mb-5 transition duration-300 hover:bg-blue-600"
             aria-expanded={showForm}
           >
             {showForm ? 'Hide Form' : 'Add Todo'}
@@ -43,12 +43,12 @@ const Home = () => {
           /> */}
         </div>
         <div className="flex w-full max-w-full">
-          <div className="w-1/3 p-5 bg-gray-800 rounded-lg shadow-lg mr-5">
+          <div className="w-1/6 p-5 bg-gray-800 rounded-lg shadow-lg mr-5 overflow-y-auto max-h-[calc(100vh-16rem)]"> 
             <h2 className="text-xl font-bold mb-4">All Todos</h2>
             <TodoList filterDate={null} /> 
           </div>
 
-          <div className="w-2/3 p-5 bg-gray-800 rounded-lg shadow-lg">
+          <div className="w-2/4 p-5  bg-gray-800 rounded-lg shadow-lg overflow-y-auto max-h-[calc(100vh-16rem)]"> 
             <h2 className="text-xl font-bold mb-4">
               Task For Today
             </h2>
