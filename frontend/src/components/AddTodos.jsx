@@ -21,7 +21,7 @@ const AddTodos = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(inputs); // This will log the current state of the inputs
+    console.log(inputs); 
     try {
       const response = await axios.post('http://localhost:3000/user/add', {
         title: inputs.title,
@@ -36,12 +36,12 @@ const AddTodos = () => {
       if (response.status === 200) {
         console.log("Form submitted successfully");
         
-        // Fetch updated todos and update state
+        
         const fetchTodos = async () => {
           try {
             const response = await axios.get('http://localhost:3000/user/todos', {
               headers: {
-                Authorization: `Bearer ${tokenHere}`, // Correct token usage
+                Authorization: `Bearer ${tokenHere}`,
               },
             });
             if (response.status === 200) {
@@ -52,7 +52,7 @@ const AddTodos = () => {
           }
         };
 
-        fetchTodos(); // Refetch todos after adding new one
+        fetchTodos(); 
       }
     } catch (e) {
       console.error("Error during form submission:", e.message);
@@ -60,30 +60,35 @@ const AddTodos = () => {
   };
 
   return (
-    <div className="add-todos">
+    <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 w-full max-w-md mx-auto mt-8">
+      <h2 className="text-2xl font-bold mb-4 text-center">Add New Todo</h2>
       <input
         name="title"
         value={inputs.title}
         onChange={handleInputChange}
         placeholder="Title"
-        className="form-input"
+        className="bg-gray-700 text-white placeholder:text-gray-400 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <input
+      <textarea
         name="description"
         value={inputs.description}
         onChange={handleInputChange}
         placeholder="Description"
-        className="form-input"
+        className="bg-gray-700 text-white placeholder:text-gray-400 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       <input
         type="date"
         name="date"
         value={inputs.date}
         onChange={handleInputChange}
-        placeholder="Date"
-        className="form-input"
+        className="bg-gray-700 text-white placeholder:text-gray-400 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      <button onClick={handleSubmit} className="form-button">Submit</button>
+      <button 
+        onClick={handleSubmit} 
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300 mt-4"
+      >
+        Submit
+      </button>
     </div>
   );
 };

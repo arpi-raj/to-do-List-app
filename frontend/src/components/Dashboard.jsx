@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Signup from './Signup';
 import Signin from './Signin';
 import ResetPassword from './ResetPassword';
@@ -9,7 +9,12 @@ function Dashboard() {
   const [showOTP, setShowOTP] = useState(false);
   const [signupData, setSignupData] = useState({});
   const [token, setToken] = useState('');
-  const [currentView, setCurrentView] = useState('signin'); 
+  const [currentView, setCurrentView] = useState('signin');
+
+  
+  const signupRef = useRef(null);
+  const signinRef = useRef(null);
+  const resetPasswordRef = useRef(null);
 
   const switchToSignin = () => setCurrentView('signin');
   const switchToSignup = () => setCurrentView('signup');
@@ -22,8 +27,9 @@ function Dashboard() {
         timeout={500}
         classNames="form"
         unmountOnExit
+        nodeRef={signupRef} 
       >
-        <div className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
+        <div ref={signupRef} className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
           <Signup 
             setShowOTP={setShowOTP} 
             setSignupData={setSignupData} 
@@ -32,23 +38,27 @@ function Dashboard() {
           />
         </div>
       </CSSTransition>
+      
       <CSSTransition
         in={currentView === 'signin'}
         timeout={500}
         classNames="form"
         unmountOnExit
+        nodeRef={signinRef} 
       >
-        <div className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
+        <div ref={signinRef} className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
           <Signin switchToSignup={switchToSignup} switchToResetPassword={switchToResetPassword} />
         </div>
       </CSSTransition>
+      
       <CSSTransition
         in={currentView === 'resetPassword'}
         timeout={500}
         classNames="form"
         unmountOnExit
+        nodeRef={resetPasswordRef} 
       >
-        <div className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
+        <div ref={resetPasswordRef} className='transition-wrapper flex flex-col p-10 rounded-lg shadow-lg'>
           <ResetPassword switchToSignin={switchToSignin} />
         </div>
       </CSSTransition>
