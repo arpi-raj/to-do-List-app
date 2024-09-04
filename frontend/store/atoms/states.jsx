@@ -1,21 +1,23 @@
-import { atom } from 'recoil';
+import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
+const { persistAtom } = recoilPersist();
 
-export const token = atom ({
-  key:"token",
-  default: ""
-})
-
+export const token = atom({
+  key: "token",
+  default: "",
+});
 
 export const todoState = atom({
-  key: 'todoState',
+  key: "todoState",
   default: [], // Default to an empty array
 });
 
-export const userState = atom ({
-  key:"userState",
-  default:{
-    userName:"",
-    userEmail:""
-  }
-})
+export const userState = atom({
+  key: "userState",
+  default: {
+    userName: "",
+    userEmail: "",
+  },
+  effects_UNSTABLE: [persistAtom],
+});
