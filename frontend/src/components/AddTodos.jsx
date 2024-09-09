@@ -29,7 +29,7 @@ const AddTodos = () => {
         date: inputs.date
       }, {
         headers: {
-          authorization: `Bearer ${tokenHere}`
+          authorization: `Bearer ${localStorage.getItem("token")}`
         }
       });
 
