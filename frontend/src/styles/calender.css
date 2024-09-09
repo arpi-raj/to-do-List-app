@@ -1,0 +1,38 @@
+/* Custom styles for RSuite Calendar in dark mode */
+.custom-calendar {
+    background-color: #1a202c;
+    color: #fff;
+  }
+  
+  .custom-calendar .rs-calendar-table-cell-content {
+    color: #fff;
+  }
+  
+  .custom-calendar .rs-calendar-table-cell:hover .rs-calendar-table-cell-content {
+    background-color: #2d3748;
+  }
+  
+  .custom-calendar .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+    background-color: #4299e1;
+  }
+  
+  .custom-calendar .rs-calendar-header {
+    color: #fff;
+  }
+  
+  .custom-calendar .rs-calendar-header-title,
+  .custom-calendar .rs-calendar-header-backward,
+  .custom-calendar .rs-calendar-header-forward {
+    color: #fff;
+  }
+  
+  .custom-calendar .rs-calendar-header-title:hover,
+  .custom-calendar .rs-calendar-header-backward:hover,
+  .custom-calendar .rs-calendar-header-forward:hover {
+    background-color: #2d3748;
+  }
+  
+  .calendar-todo-item-badge {
+    background-color: #4299e1;
+    border-color: #4299e1;
+  }

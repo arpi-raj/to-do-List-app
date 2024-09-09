@@ -45,13 +45,12 @@ const AddTodos = () => {
               },
             });
             if (response.status === 200) {
-              setTodos(response.data.todos);
+              setTodos(response.data.todos);  // Updates Recoil state
             }
           } catch (error) {
             console.error('Error fetching todos:', error.response?.data?.message || error.message);
           }
         };
-
         fetchTodos(); 
       }
     } catch (e) {
@@ -60,36 +59,37 @@ const AddTodos = () => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-800 to-gray-900 text-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 w-full max-w-md mx-auto mt-8">
-      <h2 className="text-2xl font-bold mb-4 text-center">Add New Todo</h2>
-      <input
-        name="title"
-        value={inputs.title}
-        onChange={handleInputChange}
-        placeholder="Title"
-        className="bg-gray-700 text-white placeholder:text-gray-400 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <textarea
-        name="description"
-        value={inputs.description}
-        onChange={handleInputChange}
-        placeholder="Description"
-        className="bg-gray-700 text-white placeholder:text-gray-400 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        type="date"
-        name="date"
-        value={inputs.date}
-        onChange={handleInputChange}
-        className="bg-gray-700 text-white placeholder:text-gray-400 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <button 
-        onClick={handleSubmit} 
-        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300 mt-4"
-      >
-        Submit
-      </button>
-    </div>
+    <div className="bg-gradient-to-br from-gray-100 to-gray-200 text-black p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col gap-4 w-full max-w-md mx-auto mt-8">
+  <h2 className="text-2xl font-bold mb-4 text-center">Add New Todo</h2>
+  <input
+    name="title"
+    value={inputs.title}
+    onChange={handleInputChange}
+    placeholder="Title"
+    className="bg-white text-black placeholder:text-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+  <textarea
+    name="description"
+    value={inputs.description}
+    onChange={handleInputChange}
+    placeholder="Description"
+    className="bg-white text-black placeholder:text-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+  <input
+    type="date"
+    name="date"
+    value={inputs.date}
+    onChange={handleInputChange}
+    className="bg-white text-black placeholder:text-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+  <button 
+    onClick={handleSubmit} 
+    className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300 mt-4"
+  >
+    Submit
+  </button>
+</div>
+
   );
 };
 
