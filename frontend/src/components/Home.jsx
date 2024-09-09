@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <div>
       <Navbar />
-      <div className="w-screen  h-full bg-#31473A text-black flex flex-col items-center p-5">
+      <div className="w-screen  h-full #d096e4 text-black flex flex-col items-center p-5">
         <div className="flex w-full max-w-full">
           <AllTodos/>
           <AddAndTodayTodos />

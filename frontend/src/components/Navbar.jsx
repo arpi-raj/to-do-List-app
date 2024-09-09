@@ -23,7 +23,7 @@ function Navbar() {
   }, []);
 
   return (
-    <nav className="bg-gradient-to-r bg-inherit h-20 flex justify-between items-center text-xl sticky top-0 z-50 gap-10">
+    <nav className=" bg-prime h-20 flex justify-between items-center text-xl sticky top-0 z-50 gap-10">
   <div className="ml-[5vw]">
     <Link
       to="/"
