@@ -266,15 +266,19 @@ router.post("/updateTodo", userMiddleware, async (req, res) => {
     const user = await User.findOne({ email });
 
     const { title, description, completed, date, id } = req.body;
+    console.log(`title ${title}`);
+    console.log(`desc ${description}`);
+    console.log(`comp ${completed}`);
+    console.log(`date ${date}`);
 
     if (!id) {
       return res.status(411).json({ msg: "Id is required" });
     }
-    if (!title && !description && !completed && !date) {
-      return res
-        .status(411)
-        .json({ msg: "At least one new credential is required" });
-    }
+    // if (!title && !description && !date) {
+    //   return res
+    //     .status(411)
+    //     .json({ msg: "At least one new credential is required" });
+    // }
 
     const objectId = new mongoose.Types.ObjectId(id);
     const todo = user.todo.id(objectId);
