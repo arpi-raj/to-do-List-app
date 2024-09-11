@@ -1,53 +1,23 @@
 import React from 'react';
-import { Calendar, Badge } from 'rsuite';
+import { Calendar } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import '../styles/calender.css';
 import Profile from './Profile';
-
+import CompletedTodos from './CompleteToDo';
 const MiniCalendar = () => {
-  // function getTodoList(date) {
-  //   const day = date.getDate();
-  //   switch (day) {
-  //     case 10:
-  //       return [
-  //         { time: '10:30 am', title: 'Meeting' },
-  //         { time: '12:00 pm', title: 'Lunch' }
-  //       ];
-  //     case 15:
-  //       return [
-  //         { time: '09:30 pm', title: 'Products Introduction Meeting' },
-  //         { time: '12:30 pm', title: 'Client entertaining' },
-  //         { time: '02:00 pm', title: 'Product design discussion' },
-  //         { time: '05:00 pm', title: 'Product test and acceptance' },
-  //         { time: '06:30 pm', title: 'Reporting' },
-  //         { time: '10:00 pm', title: 'Going home to walk the dog' }
-  //       ];
-  //     default:
-  //       return [];
-  //   }
-  // }
-
-  // function renderCell(date) {
-  //   const list = getTodoList(date);
-  //   if (list.length) {
-  //     return <Badge className="calendar-todo-item-badge" />;
-  //   }
-  //   return null;
-  // }
-
   return (
-<div className="w-96 ml-16 mt-20 p-5 bg-gray-100 rounded-lg shadow-lg">
-  <Profile/>
-  <h2 className="text-xl font-bold mb-4 text-black">Mini Calendar</h2>
-  <div className="calendar-container">
-    <Calendar 
-      compact 
-      bordered 
-      className="custom-calendar"
-    />
-  </div>
-</div>
-
+    <div className="w-full max-w-sm mx-auto sm:w-96 sm:ml-16 mt-4 sm:mt-5 p-4 sm:p-5 bg-background rounded-lg shadow-lg border border-gray-200">
+      <Profile />
+      <div className="calendar-container mt-4">
+        <Calendar
+          compact
+          bordered
+          className="custom-calendar"
+          style={{ border: '1px solid var(--border)', borderRadius: '0.5rem' }}
+        />
+      </div>
+      {/* <CompletedTodos/> */}
+    </div>
   );
 };
 

@@ -1,38 +1,67 @@
-/* Custom styles for RSuite Calendar in dark mode */
 .custom-calendar {
-    background-color: #1a202c;
-    color: #fff;
-  }
-  
-  .custom-calendar .rs-calendar-table-cell-content {
-    color: #fff;
-  }
-  
-  .custom-calendar .rs-calendar-table-cell:hover .rs-calendar-table-cell-content {
-    background-color: #2d3748;
-  }
-  
-  .custom-calendar .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
-    background-color: #4299e1;
-  }
-  
-  .custom-calendar .rs-calendar-header {
-    color: #fff;
-  }
-  
-  .custom-calendar .rs-calendar-header-title,
-  .custom-calendar .rs-calendar-header-backward,
-  .custom-calendar .rs-calendar-header-forward {
-    color: #fff;
-  }
-  
-  .custom-calendar .rs-calendar-header-title:hover,
-  .custom-calendar .rs-calendar-header-backward:hover,
-  .custom-calendar .rs-calendar-header-forward:hover {
-    background-color: #2d3748;
-  }
-  
-  .calendar-todo-item-badge {
-    background-color: #4299e1;
-    border-color: #4299e1;
-  }
+  background-color: var(--background);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.custom-calendar .rs-calendar-table-cell-content {
+  color: var(--text);
+}
+
+.custom-calendar .rs-calendar-table-cell:hover .rs-calendar-table-cell-content {
+  background-color: var(--hover-background);
+}
+
+.custom-calendar .rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.custom-calendar .rs-calendar-header {
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+.custom-calendar .rs-calendar-header-title,
+.custom-calendar .rs-calendar-header-backward,
+.custom-calendar .rs-calendar-header-forward {
+  color: var(--text);
+}
+
+.custom-calendar .rs-calendar-header-title:hover,
+.custom-calendar .rs-calendar-header-backward:hover,
+.custom-calendar .rs-calendar-header-forward:hover {
+  background-color: var(--hover-background);
+}
+
+.custom-calendar .rs-calendar-table-cell-day {
+  color: var(--text);
+}
+
+.custom-calendar .rs-calendar-table-header-row .rs-calendar-table-cell-content {
+  color: var(--header-text);
+  font-weight: 600;
+}
+
+.calendar-todo-item-badge {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.custom-calendar .rs-calendar-table-cell-in-range .rs-calendar-table-cell-content {
+  background-color: var(--in-range-background);
+}
+
+.custom-calendar .rs-calendar-table-cell-disabled .rs-calendar-table-cell-content {
+  color: var(--disabled-text);
+}
+
+.custom-calendar .rs-calendar-month-dropdown-cell:hover {
+  background-color: var(--hover-background);
+}
+
+.custom-calendar .rs-calendar-month-dropdown-cell-active {
+  background-color: var(--primary);
+  color: var(--white);
+}
