@@ -1,34 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useRecoilState } from 'recoil';
-import { todoState } from '../../store/atoms/states';
-import { CheckSquare, Square, Calendar, Edit, Trash2, Save, X } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { todoState } from "../../store/atoms/states";
+import {
+  CheckSquare,
+  Square,
+  Calendar,
+  Edit,
+  Trash2,
+  Save,
+  X,
+} from "lucide-react";
 
 const TodoList = ({ filterDate }) => {
   const [todos, setTodos] = useRecoilState(todoState);
-  const tokenHere = localStorage.getItem('token');
+  const tokenHere = localStorage.getItem("token");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [editingId, setEditingId] = useState(null);
-  const [editedTitle, setEditedTitle] = useState('');
-  const [editedDescription, setEditedDescription] = useState('');
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
 
   useEffect(() => {
     const fetchTodos = async () => {
       if (!tokenHere) {
-        setError('Authentication token is missing. Please login.');
+        setError("Authentication token is missing. Please login.");
         setLoading(false);
         return;
       }
       try {
-        const response = await axios.get('http://localhost:3000/user/todos', {
+        const response = await axios.get("http://localhost:3000/user/todos", {
           headers: { Authorization: `Bearer ${tokenHere}` },
         });
         if (response.status === 200) {
           setTodos(response.data.todos);
         }
       } catch (error) {
-        setError('Failed to fetch todos. Please try again later.');
+        setError("Failed to fetch todos. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -38,9 +46,9 @@ const TodoList = ({ filterDate }) => {
 
   const filterTodos = () => {
     if (filterDate) {
-      const filterDateISO = new Date(filterDate).toISOString().split('T')[0];
-      return todos.filter(todo => {
-        const todoDateISO = new Date(todo.date).toISOString().split('T')[0];
+      const filterDateISO = new Date(filterDate).toISOString().split("T")[0];
+      return todos.filter((todo) => {
+        const todoDateISO = new Date(todo.date).toISOString().split("T")[0];
         return todoDateISO === filterDateISO;
       });
     }
@@ -49,31 +57,37 @@ const TodoList = ({ filterDate }) => {
 
   const filteredTodos = filterTodos();
 
-  const handleComplete = async (id) => {
+  const handleComplete = async (completed, id) => {
     try {
-      const updatedTodo = todos.find(todo => todo._id === id);
-      const response = await axios.put(`http://localhost:3000/user/todos/${id}`,
-        { ...updatedTodo, completed: !updatedTodo.completed },
+      const updatedTodo = todos.find((todo) => todo._id === id);
+      const response = await axios.post(
+        `http://localhost:3000/user/updateTodo`,
+        { completed: !completed, id: id },
         { headers: { Authorization: `Bearer ${tokenHere}` } }
       );
       if (response.status === 200) {
-        setTodos(todos.map(todo => todo._id === id ? { ...todo, completed: !todo.completed } : todo));
+        setTodos(
+          todos.map((todo) =>
+            todo._id === id ? { ...todo, completed: !todo.completed } : todo
+          )
+        );
       }
     } catch (error) {
-      console.error('Failed to update todo:', error);
+      console.error("Failed to update todo:", error);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/user/todos/${id}`,
+      const response = await axios.delete(
+        `http://localhost:3000/user/todos/${id}`,
         { headers: { Authorization: `Bearer ${tokenHere}` } }
       );
       if (response.status === 200) {
-        setTodos(todos.filter(todo => todo._id !== id));
+        setTodos(todos.filter((todo) => todo._id !== id));
       }
     } catch (error) {
-      console.error('Failed to delete todo:', error);
+      console.error("Failed to delete todo:", error);
     }
   };
 
@@ -85,22 +99,29 @@ const TodoList = ({ filterDate }) => {
 
   const handleCancelEdit = () => {
     setEditingId(null);
-    setEditedTitle('');
-    setEditedDescription('');
+    setEditedTitle("");
+    setEditedDescription("");
   };
 
   const handleSave = async (id) => {
     try {
-      const response = await axios.put(`http://localhost:3000/user/todos/${id}`,
-        { title: editedTitle, description: editedDescription },
+      const response = await axios.post(
+        `http://localhost:3000/user/updateTodo`,
+        { title: editedTitle, description: editedDescription, id: id },
         { headers: { Authorization: `Bearer ${tokenHere}` } }
       );
       if (response.status === 200) {
-        setTodos(todos.map(todo => todo._id === id ? { ...todo, title: editedTitle, description: editedDescription } : todo));
+        setTodos(
+          todos.map((todo) =>
+            todo._id === id
+              ? { ...todo, title: editedTitle, description: editedDescription }
+              : todo
+          )
+        );
         setEditingId(null);
       }
     } catch (error) {
-      console.error('Failed to update todo:', error);
+      console.error("Failed to update todo:", error);
     }
   };
 
@@ -114,7 +135,10 @@ const TodoList = ({ filterDate }) => {
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <div
+        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+        role="alert"
+      >
         <strong className="font-bold">Error!</strong>
         <span className="block sm:inline"> {error}</span>
       </div>
@@ -131,7 +155,7 @@ const TodoList = ({ filterDate }) => {
           >
             <div className="flex items-end text-left space-x-3 flex-grow">
               <button
-                onClick={() => handleComplete(todo._id)}
+                onClick={() => handleComplete(todo.completed, todo._id)}
                 className="focus:outline-none bg-transparent mt-1 border-none"
               >
                 {todo.completed ? (
@@ -159,7 +183,9 @@ const TodoList = ({ filterDate }) => {
                   </>
                 ) : (
                   <>
-                    <h3 className="text-sm font-medium text-gray-900">{todo.title}</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      {todo.title}
+                    </h3>
                     <p className="text-xs text-gray-600">{todo.description}</p>
                   </>
                 )}
@@ -170,7 +196,10 @@ const TodoList = ({ filterDate }) => {
               <div className="flex items-center space-x-2">
                 <Calendar className="text-gray-400 h-4 w-4" />
                 <span className="text-xs text-gray-500 whitespace-nowrap">
-                  {new Date(todo.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  {new Date(todo.date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
                 </span>
               </div>
               <div className="flex space-x-1">
@@ -211,7 +240,9 @@ const TodoList = ({ filterDate }) => {
         <div className="text-center text-gray-400 py-10">
           <Calendar className="h-16 w-16 mx-auto mb-4 text-gray-300" />
           <p className="text-xl">
-            {filterDate ? "No todos for the selected date." : "No todos available."}
+            {filterDate
+              ? "No todos for the selected date."
+              : "No todos available."}
           </p>
         </div>
       )}
