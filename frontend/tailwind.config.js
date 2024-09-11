@@ -11,7 +11,10 @@ export default {
 
   colors: {
     custom:'#e4e5f4',
-    acsent:'#4e54cb',
+    accent:'#4e54cb',
+    text:'#080708',
+    prime:'#9c4eb7',
+    sec:'#d096e4',
     'text': {
       50: 'var(--text-50)',
       100: 'var(--text-100)',
