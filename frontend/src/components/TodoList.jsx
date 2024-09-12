@@ -2,15 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { todoState } from "../../store/atoms/states";
-import {
-  CheckSquare,
-  Square,
-  Calendar,
-  Edit,
-  Trash2,
-  Save,
-  X,
-} from "lucide-react";
+import { CheckSquare, Square, Calendar, Edit, Trash2, Save, X } from "lucide-react";
 
 const TodoList = ({ filterDate }) => {
   const [todos, setTodos] = useRecoilState(todoState);
@@ -49,7 +41,7 @@ const TodoList = ({ filterDate }) => {
       const filterDateISO = new Date(filterDate).toISOString().split("T")[0];
       return todos.filter((todo) => {
         const todoDateISO = new Date(todo.date).toISOString().split("T")[0];
-        return todoDateISO === filterDateISO;
+        return todoDateISO === filterDateISO && !todo.completed; // Exclude completed todos
       });
     }
     return todos;
@@ -130,18 +122,15 @@ const TodoList = ({ filterDate }) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64 bg-gray-100">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="flex justify-center items-center h-64 bg-background">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div
-        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-        role="alert"
-      >
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <strong className="font-bold">Error!</strong>
         <span className="block sm:inline"> {error}</span>
       </div>
@@ -149,12 +138,12 @@ const TodoList = ({ filterDate }) => {
   }
 
   return (
-    <div className="space-y-2 max-w-md mx-auto bg-gray-50">
+    <div className="space-y-2 max-w-md mx-auto bg-background">
       {filteredTodos.length > 0 ? (
         filteredTodos.map((todo) => (
           <div
             key={todo._id}
-            className="flex items-start justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 transition-colors duration-150"
+            className="flex items-start justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-colors duration-150"
           >
             <div className="flex items-end text-left space-x-3 flex-grow">
               <button
@@ -162,7 +151,7 @@ const TodoList = ({ filterDate }) => {
                 className="focus:outline-none bg-transparent mt-1 border-none"
               >
                 {todo.completed ? (
-                  <CheckSquare className="text-green-500 h-5 w-5" />
+                  <CheckSquare className="text-emerald-500 h-5 w-5" />
                 ) : (
                   <Square className="text-gray-400 h-5 w-5" />
                 )}
@@ -175,20 +164,18 @@ const TodoList = ({ filterDate }) => {
                       type="text"
                       value={editedTitle}
                       onChange={(e) => setEditedTitle(e.target.value)}
-                      className="w-full text-sm font-medium text-gray-900 mb-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400 bg-gray-50"
+                      className="w-full text-sm font-medium text-text mb-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary bg-gray-50"
                     />
                     <textarea
                       value={editedDescription}
                       onChange={(e) => setEditedDescription(e.target.value)}
-                      className="w-full text-xs text-gray-600 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-400 bg-gray-50"
+                      className="w-full text-xs text-gray-600 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary bg-gray-50"
                       rows="3"
                     />
                   </>
                 ) : (
                   <>
-                    <h3 className="text-sm font-medium text-gray-900">
-                      {todo.title}
-                    </h3>
+                    <h3 className="text-sm font-medium text-text">{todo.title}</h3>
                     <p className="text-xs text-gray-600">{todo.description}</p>
                   </>
                 )}
@@ -210,7 +197,7 @@ const TodoList = ({ filterDate }) => {
                   <>
                     <button
                       onClick={() => handleSave(todo._id)}
-                      className="text-green-500 hover:text-green-600 bg-transparent focus:outline-none border-none"
+                      className="text-primary hover:text-primary-dark bg-transparent focus:outline-none border-none"
                     >
                       <Save className="h-4 w-4" />
                     </button>
@@ -231,7 +218,7 @@ const TodoList = ({ filterDate }) => {
                 )}
                 <button
                   onClick={() => handleDelete(todo._id)}
-                  className="text-red-500 bg-transparent hover:text-red-600 focus:outline-none border-none"
+                  className="text-red-500 hover:text-red-600 bg-transparent focus:outline-none border-none"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -243,9 +230,7 @@ const TodoList = ({ filterDate }) => {
         <div className="text-center text-gray-400 py-10">
           <Calendar className="h-16 w-16 mx-auto mb-4 text-gray-300" />
           <p className="text-xl">
-            {filterDate
-              ? "No todos for the selected date."
-              : "No todos available."}
+            {filterDate ? "No Task for Today." : "No Task Available."}
           </p>
         </div>
       )}
