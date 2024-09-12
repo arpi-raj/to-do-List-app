@@ -72,8 +72,11 @@ const TodoList = ({ filterDate }) => {
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/user/todos/${id}`,
-        { headers: { Authorization: `Bearer ${tokenHere}` } }
+        `http://localhost:3000/user/deleteTodo`,
+        {
+          headers: { Authorization: `Bearer ${tokenHere}` },
+          data: { id: id } // Pass id inside the data object
+        }
       );
       if (response.status === 200) {
         setTodos(todos.filter((todo) => todo._id !== id));

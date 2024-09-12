@@ -35,7 +35,7 @@ const ResetPassword = ({ switchToSignin }) => {
   const handleSendOTP = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/user/forgot-password', {
+      const response = await axios.post('http://localhost:3000/user/forgotpass', {
         email: email,
       });
       if (response.status === 200) {

@@ -301,5 +301,26 @@ router.post("/updateTodo", userMiddleware, async (req, res) => {
   }
 });
 
+router.delete("/deleteTodo", userMiddleware, async (req, res) => {
+  try {
+    const { id } = req.body;
+    const email = req.user.email;
+    const user = await User.findOne({ email });
+    const objId = new mongoose.Types.ObjectId(id);
+
+    user.todo.pull({ _id: objId });
+    await user.save();
+
+    res.status(200).json({
+      msg: "Deleted Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "An error occurred",
+    });
+    console.log(error)
+  }
+});
+
 console.log("Exporting router:", typeof router); // Add this line to log the type
 module.exports = router;
