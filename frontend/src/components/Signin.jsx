@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+import process from "process";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../../store/atoms/states";
 import { useNavigate } from "react-router-dom";
 import { token } from "../../store/atoms/states";
 import CryptoJS from "crypto-js";
+
+const url = import.meta.env.url || "http://localhost:3000";
 
 const Signin = ({ switchToSignup, switchToResetPassword }) => {
   const [signinData, setSigninData] = useState({ email: "", password: "" });
@@ -17,7 +20,7 @@ const Signin = ({ switchToSignup, switchToResetPassword }) => {
   useEffect(() => {
     async function fetchInfo() {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:3000/user/info", {
+      const response = await axios.get(`${url}/user/info`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -47,7 +50,7 @@ const Signin = ({ switchToSignup, switchToResetPassword }) => {
     try {
       const hashedPassword = hashPassword(signinData.password);
 
-      const response = await axios.post("http://localhost:3000/user/signin", {
+      const response = await axios.post(`{url}/user/signin`, {
         email: signinData.email,
         password: hashedPassword,
       });
@@ -57,7 +60,7 @@ const Signin = ({ switchToSignup, switchToResetPassword }) => {
         localStorage.setItem("token", newToken);
         setToken(newToken);
 
-        const response2 = await axios.get("http://localhost:3000/user/info", {
+        const response2 = await axios.get(`${url}/user/info`, {
           headers: {
             authorization: `Bearer ${newToken}`,
           },

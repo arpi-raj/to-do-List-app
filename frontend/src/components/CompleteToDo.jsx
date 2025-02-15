@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import process from "process";
 import { useRecoilState } from "recoil";
 import { todoState } from "../../store/atoms/states";
 import { CheckSquare, Trash2, Edit, Save, X, Calendar } from "lucide-react";
+
+const url = import.meta.env.url || "http://localhost:3000";
 
 const CompletedTodos = () => {
   const [todos, setTodos] = useRecoilState(todoState);
@@ -18,7 +21,7 @@ const CompletedTodos = () => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/user/todos", {
+        const response = await axios.get(`${url}/user/todos`, {
           headers: { Authorization: `Bearer ${tokenHere}` },
         });
         if (response.status === 200) {
@@ -70,9 +73,7 @@ const CompletedTodos = () => {
               </button>
 
               <div className="min-w-0 flex-grow flex flex-col justify-start">
-                <h3 className="text-sm font-medium text-text">
-                  {todo.title}
-                </h3>
+                <h3 className="text-sm font-medium text-text">{todo.title}</h3>
                 <p className="text-xs text-gray-600">{todo.description}</p>
               </div>
             </div>

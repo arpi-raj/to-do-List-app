@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import AddTodos from './AddTodos';
-import TodoList from './TodoList';
-import { useSetRecoilState } from 'recoil';
+import React, { useState, useEffect } from "react";
+import AddTodos from "./AddTodos";
+import TodoList from "./TodoList";
+import { useSetRecoilState } from "recoil";
 import { todoState } from "../../store/atoms/states";
+import process from "process";
+
+const url = import.meta.env.url || "http://localhost:3000";
 
 const AddAndTodayTodos = () => {
   const [showForm, setShowForm] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const setTodos = useSetRecoilState(todoState);
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
     setSelectedDate(today);
 
     const checkMobile = () => {
@@ -19,9 +22,9 @@ const AddAndTodayTodos = () => {
     };
 
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
 
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const handleToggle = () => {
@@ -30,15 +33,15 @@ const AddAndTodayTodos = () => {
 
   const fetchTodos = async () => {
     try {
-      const response = await fetch('http://localhost:3000/user/todos', {
+      const response = await fetch(`${url}/user/todos`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       const data = await response.json();
       setTodos(data.todos);
     } catch (error) {
-      console.error('Error fetching todos:', error.message);
+      console.error("Error fetching todos:", error.message);
     }
   };
 
@@ -47,7 +50,9 @@ const AddAndTodayTodos = () => {
       <button
         onClick={handleToggle}
         className={`${
-          isMobile ? 'fixed bottom-4 right-4 z-30' : 'absolute top-0 right-0 mt-3 mr-3'
+          isMobile
+            ? "fixed bottom-4 right-4 z-30"
+            : "absolute top-0 right-0 mt-3 mr-3"
         } flex items-center justify-center px-4 py-2 bg-primary text-white rounded-full shadow-md transition duration-300 hover:bg-blue-500`}
         aria-expanded={showForm}
       >
@@ -58,7 +63,9 @@ const AddAndTodayTodos = () => {
       {showForm && (
         <div
           className={`${
-            isMobile ? 'fixed inset-0 z-40 overflow-y-auto bg-black bg-opacity-70' : 'absolute inset-0 z-40 bg-black bg-opacity-70'
+            isMobile
+              ? "fixed inset-0 z-40 overflow-y-auto bg-black bg-opacity-70"
+              : "absolute inset-0 z-40 bg-black bg-opacity-70"
           } flex items-center justify-center`}
           onClick={() => setShowForm(false)}
         >
@@ -66,10 +73,12 @@ const AddAndTodayTodos = () => {
             className="bg-background p-4 rounded-lg shadow-lg max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
           >
-            <AddTodos onClose={() => {
-              setShowForm(false);
-              fetchTodos(); 
-            }} />
+            <AddTodos
+              onClose={() => {
+                setShowForm(false);
+                fetchTodos();
+              }}
+            />
           </div>
         </div>
       )}

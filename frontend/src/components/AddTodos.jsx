@@ -1,21 +1,24 @@
-import { useState } from 'react';
-import axios from 'axios';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useState } from "react";
+import axios from "axios";
+import process from "process";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { token, todoState } from "../../store/atoms/states";
-import { FaCalendarAlt } from 'react-icons/fa';
-import DatePicker from 'react-datepicker';
-import { format } from 'date-fns';
-import 'react-datepicker/dist/react-datepicker.css'; 
+import { FaCalendarAlt } from "react-icons/fa";
+import DatePicker from "react-datepicker";
+import { format } from "date-fns";
+import "react-datepicker/dist/react-datepicker.css";
 
-const AddTodos = ({ onClose }) => { 
+const url = import.meta.env.url || "http://localhost:3000";
+
+const AddTodos = ({ onClose }) => {
   const tokenHere = useRecoilValue(token);
   const setTodos = useSetRecoilState(todoState);
   const [inputs, setInputs] = useState({
-    title: '',
-    description: '',
-    date: null, 
+    title: "",
+    description: "",
+    date: null,
   });
-  const [showDatePicker, setShowDatePicker] = useState(false); 
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,41 +33,51 @@ const AddTodos = ({ onClose }) => {
       ...prevInputs,
       date,
     }));
-    setShowDatePicker(false); 
+    setShowDatePicker(false);
   };
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/user/add', {
-        title: inputs.title,
-        description: inputs.description,
-        date: inputs.date ? format(inputs.date, 'yyyy-MM-dd') : '', 
-      }, {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem('token')}`,
+      const response = await axios.post(
+        `${url}/user/add`,
+        {
+          title: inputs.title,
+          description: inputs.description,
+          date: inputs.date ? format(inputs.date, "yyyy-MM-dd") : "",
         },
-      });
-  
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
       if (response.status === 200) {
         const fetchTodos = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/user/todos', {
-              headers: {
-                Authorization: `Bearer ${tokenHere}`,
-              },
-            });
+            const response = await axios.get(
+              "http://localhost:3000/user/todos",
+              {
+                headers: {
+                  Authorization: `Bearer ${tokenHere}`,
+                },
+              }
+            );
             if (response.status === 200) {
               setTodos(response.data.todos);
             }
           } catch (error) {
-            console.error('Error fetching todos:', error.response?.data?.message || error.message);
+            console.error(
+              "Error fetching todos:",
+              error.response?.data?.message || error.message
+            );
           }
         };
         fetchTodos();
-        onClose(); 
+        onClose();
       }
     } catch (e) {
-      console.error('Error during form submission:', e.message);
+      console.error("Error during form submission:", e.message);
     }
   };
 
@@ -90,7 +103,7 @@ const AddTodos = ({ onClose }) => {
       <div className="relative flex items-center mt-4">
         <button
           className="bg-white text-blue-500 rounded-full p-2 shadow focus:outline-none"
-          onClick={() => setShowDatePicker(!showDatePicker)} 
+          onClick={() => setShowDatePicker(!showDatePicker)}
         >
           <FaCalendarAlt className="text-xl" />
         </button>
@@ -100,14 +113,14 @@ const AddTodos = ({ onClose }) => {
             <DatePicker
               selected={inputs.date}
               onChange={handleDateChange}
-              inline 
+              inline
             />
           </div>
         )}
       </div>
 
-      <button 
-        onClick={handleSubmit} 
+      <button
+        onClick={handleSubmit}
         className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300 mt-4"
       >
         Submit

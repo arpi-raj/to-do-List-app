@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import process from "process";
 import { useRecoilState } from "recoil";
 import { todoState } from "../../store/atoms/states";
-import { CheckSquare, Square, Calendar, Edit, Trash2, Save, X } from "lucide-react";
+import {
+  CheckSquare,
+  Square,
+  Calendar,
+  Edit,
+  Trash2,
+  Save,
+  X,
+} from "lucide-react";
 
+const url = import.meta.env.url || "http://localhost:3000";
 const TodoList = ({ filterDate }) => {
   const [todos, setTodos] = useRecoilState(todoState);
   const tokenHere = localStorage.getItem("token");
@@ -21,7 +31,7 @@ const TodoList = ({ filterDate }) => {
         return;
       }
       try {
-        const response = await axios.get("http://localhost:3000/user/todos", {
+        const response = await axios.get(`${url}/user/todos`, {
           headers: { Authorization: `Bearer ${tokenHere}` },
         });
         if (response.status === 200) {
@@ -53,7 +63,7 @@ const TodoList = ({ filterDate }) => {
     try {
       const updatedTodo = todos.find((todo) => todo._id === id);
       const response = await axios.post(
-        `http://localhost:3000/user/updateTodo`,
+        `${url}/user/updateTodo`,
         { completed: !completed, id: id },
         { headers: { Authorization: `Bearer ${tokenHere}` } }
       );
@@ -71,13 +81,10 @@ const TodoList = ({ filterDate }) => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3000/user/deleteTodo`,
-        {
-          headers: { Authorization: `Bearer ${tokenHere}` },
-          data: { id: id } // Pass id inside the data object
-        }
-      );
+      const response = await axios.delete(`${url}/user/deleteTodo`, {
+        headers: { Authorization: `Bearer ${tokenHere}` },
+        data: { id: id }, // Pass id inside the data object
+      });
       if (response.status === 200) {
         setTodos(todos.filter((todo) => todo._id !== id));
       }
@@ -101,7 +108,7 @@ const TodoList = ({ filterDate }) => {
   const handleSave = async (id) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/user/updateTodo`,
+        `${url}/user/updateTodo`,
         { title: editedTitle, description: editedDescription, id: id },
         { headers: { Authorization: `Bearer ${tokenHere}` } }
       );
@@ -130,7 +137,10 @@ const TodoList = ({ filterDate }) => {
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <div
+        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+        role="alert"
+      >
         <strong className="font-bold">Error!</strong>
         <span className="block sm:inline"> {error}</span>
       </div>
@@ -175,7 +185,9 @@ const TodoList = ({ filterDate }) => {
                   </>
                 ) : (
                   <>
-                    <h3 className="text-sm font-medium text-text">{todo.title}</h3>
+                    <h3 className="text-sm font-medium text-text">
+                      {todo.title}
+                    </h3>
                     <p className="text-xs text-gray-600">{todo.description}</p>
                   </>
                 )}
