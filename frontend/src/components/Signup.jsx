@@ -3,7 +3,7 @@ import axios from "axios";
 import process from "process";
 import CryptoJS from "crypto-js";
 
-const url = import.meta.env.url || "http://localhost:3000";
+const url = import.meta.env.react_url || "http://localhost:3000";
 const Signup = ({ setShowOTP, setSignupData, showOTP, switchToSignin }) => {
   const [localSignupData, setLocalSignupData] = useState({
     username: "",

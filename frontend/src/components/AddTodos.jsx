@@ -8,7 +8,7 @@ import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 
-const url = import.meta.env.url || "http://localhost:3000";
+const url = import.meta.env.react_url || "http://localhost:3000";
 
 const AddTodos = ({ onClose }) => {
   const tokenHere = useRecoilValue(token);

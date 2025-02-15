@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { token } from "../../store/atoms/states";
 import CryptoJS from "crypto-js";
 
-const url = import.meta.env.url || "http://localhost:3000";
+const url = import.meta.env.react_url || "http://localhost:3000";
 
 const Signin = ({ switchToSignup, switchToResetPassword }) => {
   const [signinData, setSigninData] = useState({ email: "", password: "" });

@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import { todoState } from "../../store/atoms/states";
 import { CheckSquare, Trash2, Edit, Save, X, Calendar } from "lucide-react";
 
-const url = import.meta.env.url || "http://localhost:3000";
+const url = import.meta.env.react_url || "http://localhost:3000";
 
 const CompletedTodos = () => {
   const [todos, setTodos] = useRecoilState(todoState);

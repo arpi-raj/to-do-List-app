@@ -318,7 +318,7 @@ router.delete("/deleteTodo", userMiddleware, async (req, res) => {
     res.status(500).json({
       msg: "An error occurred",
     });
-    console.log(error)
+    console.log(error);
   }
 });
 
