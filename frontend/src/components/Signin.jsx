@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { token } from "../../store/atoms/states";
 import CryptoJS from "crypto-js";
 
-const url = import.meta.env.react_url || "http://localhost:3000";
+const url = import.meta.env.VITE_API_URL || "http://localhost:3000";
+console.log(url);
 
 const Signin = ({ switchToSignup, switchToResetPassword }) => {
   const [signinData, setSigninData] = useState({ email: "", password: "" });
@@ -50,7 +51,7 @@ const Signin = ({ switchToSignup, switchToResetPassword }) => {
     try {
       const hashedPassword = hashPassword(signinData.password);
 
-      const response = await axios.post(`{url}/user/signin`, {
+      const response = await axios.post(`${url}/user/signin`, {
         email: signinData.email,
         password: hashedPassword,
       });
@@ -72,13 +73,12 @@ const Signin = ({ switchToSignup, switchToResetPassword }) => {
           console.log(userName);
           setUserState({ userName, userEmail });
         }
-
+        console.log(url);
         navigate("/home");
       } else {
         setErrorMessage(
           response.data.msg || "Signin failed. Please try again."
         );
-
       }
     } catch (error) {
       setErrorMessage(
