@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from "vite";
 
 export default defineConfig({
   server: {
     cors: {
       // the origin you will be accessing via browser
-      origin: 'https://arpi-to-do.netlify.app',
+      origin: "https://arpi-to-do.netlify.app/",
     },
   },
   build: {
@@ -12,7 +12,7 @@ export default defineConfig({
     manifest: true,
     rollupOptions: {
       // overwrite default .html entry
-      input: 'index.html',
+      input: "index.html",
     },
   },
-})
+});

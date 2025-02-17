@@ -13,7 +13,8 @@ import {
   X,
 } from "lucide-react";
 
-const url = import.meta.env.react_url || "http://localhost:3000";
+const url = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 const TodoList = ({ filterDate }) => {
   const [todos, setTodos] = useRecoilState(todoState);
   const tokenHere = localStorage.getItem("token");
