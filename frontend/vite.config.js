@@ -4,7 +4,7 @@ export default defineConfig({
   server: {
     cors: {
       // the origin you will be accessing via browser
-      origin: 'https://to-do-list-app-yjan.onrender.com',
+      origin: 'https://arpi-to-do.netlify.app',
     },
   },
   build: {
